@@ -1,7 +1,9 @@
 let canvas = document.getElementById("snake");
 let context = canvas.getContext("2d");
+let counter = document.querySelector(".counter");
 let box = 32;
 let snake = [];
+let score = 0;
 
 snake[0] = {
     x: 8 * box,
@@ -33,13 +35,15 @@ function  drawFood() {
 document.addEventListener('keydown', update);
 
 function update (event) {
-    if(event.keyCode == 37 && direction != "right") direction = "left";
-    if(event.keyCode == 38 && direction != "down") direction = "up";
-    if(event.keyCode == 39 && direction != "left") direction = "right";
-    if(event.keyCode == 40 && direction != "up") direction = "down";
+    if(event.keyCode == 37 && direction != "right" && 0 <= snake[0].y && snake[0].y <= 15 * box) direction = "left";
+    if(event.keyCode == 38 && direction != "down" && 0 <= snake[0].x && snake[0].x <= 15 * box) direction = "up";
+    if(event.keyCode == 39 && direction != "left" && 0 <= snake[0].y && snake[0].y <= 15 * box) direction = "right";
+    if(event.keyCode == 40 && direction != "up" && 0 <= snake[0].x && snake[0].x <= 15 * box) direction = "down";
 }
 
 function iniciarJogo(){
+    counter.innerHTML = score;
+
     if(snake[0].x > 15 * box && direction == "right") snake[0].x = 0;
     if(snake[0].x < 0 && direction == "left") snake[0].x = 16 * box;
     if(snake[0].y > 15 * box && direction == "down") snake[0].y = 0;
@@ -48,7 +52,7 @@ function iniciarJogo(){
     for(i = 1; i < snake.length; i++) {
         if(snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
             clearInterval(jogo);
-            alert('Game Over :(')
+            alert(`Game Over :( \nSua pontuação é: ${score}!`);
         }
     }
     
@@ -69,7 +73,8 @@ function iniciarJogo(){
     }
     else {
         food.x = Math.floor(Math.random() * 15 + 1) * box,
-        food.y = Math.floor(Math.random() * 15 + 1) * box
+        food.y = Math.floor(Math.random() * 15 + 1) * box,
+        counter.innerHTML = ++score;
     }
 
     let newHead = {
